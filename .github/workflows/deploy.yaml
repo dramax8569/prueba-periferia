@@ -3,7 +3,7 @@ name: CI / Build & GitOps deploy
 on:
   push:
     branches:
-      - main
+      - master
 
 permissions:
   contents: write   # permite a la acción commitear cambios
@@ -73,4 +73,4 @@ jobs:
           fi
           git add charts/myapp/values.yaml
           git commit -m "chore: update image to ${{ env.IMAGE_TAG }}"
-          git push origin HEAD:main
+          git push origin HEAD:master
