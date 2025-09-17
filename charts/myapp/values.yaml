@@ -1,7 +1,7 @@
 image:
   pullPolicy: IfNotPresent
   repository: docker.io/dramax/myapp
-  tag: f93fcf9fb311e26b81fb5c06c12d9b50a3438657
+  tag: 33cc4a330393a53e11790caae7e23987fd689ca0
 replicaCount: 1
 resources: {}
 service:
