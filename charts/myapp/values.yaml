@@ -1,12 +1,9 @@
-replicaCount: 1
-
 image:
-  repository: docker.io/your-dockerhub-user/myapp
-  tag: latest
   pullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP
-  port: 3000
-
+  repository: docker.io/dramax/myapp
+  tag: f93fcf9fb311e26b81fb5c06c12d9b50a3438657
+replicaCount: 1
 resources: {}
+service:
+  port: 3000
+  type: ClusterIP
