@@ -1,0 +1,42 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Logs
+*.log
+logs/
+*.out
+*.err
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Docker
+*.tar
+*.tmp
+
+# Helm / Kubernetes
+charts/**/charts/
+charts/**/tmpcharts/
+*.tgz
+
+# GitHub Actions / CI
+.env
+.secrets/
+*.pid
+
+# Local binaries (NO subir ejecutables)
+minikube*
+argocd*
+kubectl*
+kind*
+
+# Misc
+*.bak
+*.old
+*.retry
