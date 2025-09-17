@@ -60,6 +60,10 @@ curl http://localhost:3000
 # → debería responder: Hello from myapp! version=<commit-sha>
 ```
 
+[![Captura-de-pantalla-2025-09-17-180531.png](https://i.postimg.cc/SRJ40kct/Captura-de-pantalla-2025-09-17-180531.png)](https://postimg.cc/dZPprMH8)
+
+[![Captura-de-pantalla-2025-09-17-180723.png](https://i.postimg.cc/MTZxDyHw/Captura-de-pantalla-2025-09-17-180723.png)](https://postimg.cc/5HrZ9Q8K)
+
 ---
 
 ### 🔹 2. Validar el chart con Helm (local)
@@ -74,7 +78,9 @@ Esto mostrará los manifests Kubernetes que se generarían. Verifica que:
 - La imagen (`image.repository` y `image.tag`) coincida con lo que subió el pipeline.
 - El **Deployment** y el **Service** tengan los nombres correctos.
 
+[![Captura-de-pantalla-2025-09-17-180800.png](https://i.postimg.cc/cJB0wDsT/Captura-de-pantalla-2025-09-17-180800.png)](https://postimg.cc/5HyhMSQF)
 ---
+
 
 ### 🔹 3. Validar que ArgoCD detecta la app
 
@@ -100,6 +106,10 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 En la UI deberías ver la app **myapp** con estado **Synced** y **Healthy** ✅.
 
+
+[![Captura-de-pantalla-2025-09-17-180423.png](https://i.postimg.cc/gjQWmQDc/Captura-de-pantalla-2025-09-17-180423.png)](https://postimg.cc/tn3fzrw8)
+
+
 ---
 
 ### 🔹 4. Validar en Kubernetes que la app corre
@@ -118,6 +128,7 @@ curl http://localhost:3000
 # → Hello from myapp! version=<commit-sha>
 ```
 
+[![Captura-de-pantalla-2025-09-17-181653.png](https://i.postimg.cc/NMNtP52H/Captura-de-pantalla-2025-09-17-181653.png)](https://postimg.cc/34DzkrB8)
 ---
 
 ## 📌 Resumen
