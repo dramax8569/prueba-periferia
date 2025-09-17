@@ -1,0 +1,76 @@
+name: CI / Build & GitOps deploy
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write   # permite a la acción commitear cambios
+
+jobs:
+  build-and-update-values:
+    # evita que el workflow se dispare por commits hechos por GitHub Actions
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_REPO: ${{ secrets.DOCKERHUB_USERNAME }}/myapp
+      IMAGE_TAG: ${{ github.sha }}
+      IMAGE: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/myapp:${{ github.sha }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true   # usar GITHUB_TOKEN para push
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}
+
+      - name: Install python yaml helper
+        run: python -m pip install pyyaml
+
+      - name: Update charts/myapp/values.yaml (set image repo & tag)
+        run: |
+          python - <<'PY'
+          import yaml, sys
+          p = "charts/myapp/values.yaml"
+          with open(p) as f:
+            data = yaml.safe_load(f)
+          # set fields
+          data.setdefault('image', {})
+          data['image']['repository'] = "docker.io/${{ secrets.DOCKERHUB_USERNAME }}/myapp"
+          data['image']['tag'] = "${{ github.sha }}"
+          with open(p, 'w') as f:
+            yaml.safe_dump(data, f, default_flow_style=False)
+          print("Updated", p)
+          PY
+
+      - name: Show diff
+        run: git --no-pager diff -- charts/myapp/values.yaml || true
+
+      - name: Commit & push values.yaml if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git add charts/myapp/values.yaml
+          git commit -m "chore: update image to ${{ env.IMAGE_TAG }}"
+          git push origin HEAD:main

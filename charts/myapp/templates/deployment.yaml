@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "myapp.fullname" . | default (printf "%s" .Release.Name) }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "myapp.fullname" . | default (printf "%s" .Release.Name) }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "myapp.fullname" . | default (printf "%s" .Release.Name) }}
+    spec:
+      containers:
+        - name: myapp
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: APP_VERSION
+              value: "{{ .Values.image.tag }}"
+          resources: {{ toYaml .Values.resources | nindent 12 }}
