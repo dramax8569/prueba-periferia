@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/dramax8569/prueba-periferia'
-    targetRevision: main
+    targetRevision: master
     path: charts/myapp
     helm:
       valueFiles:
